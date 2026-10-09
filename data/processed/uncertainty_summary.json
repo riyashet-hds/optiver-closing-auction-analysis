@@ -1,0 +1,16 @@
+{
+  "target_coverage": 0.8,
+  "raw_quantile_coverage_valid": 0.8096329329374362,
+  "conformal_qhat_bps": 0.1860266411025304,
+  "conformal_coverage_valid": 0.8181188515985843,
+  "mean_width_bps": 19.755244830142093,
+  "spearman_width_vs_abs_error": 0.3226128353560114,
+  "aurc": {
+    "conformal_width": 4.354074115906381,
+    "stock_historical_volatility": 4.774096400473088,
+    "spread_bps": 4.928053627515172,
+    "random": 5.958836257318
+  },
+  "mae_all_rows": 5.963181877885446,
+  "mae_narrowest_50pct": 4.15597728567926
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Okabe-Ito Colorblind Safe (Riya)",
+  "dataColors": ["#0072B2", "#E69F00", "#009E73", "#D55E00", "#56B4E9", "#CC79A7", "#F0E442", "#000000"],
+  "foreground": "#252423",
+  "background": "#F8F6F2",
+  "tableAccent": "#0072B2",
+  "good": "#009E73",
+  "neutral": "#E69F00",
+  "bad": "#D55E00",
+  "maximum": "#0072B2",
+  "center": "#F0E442",
+  "minimum": "#56B4E9",
+  "null": "#B3B0AD"
+}

@@ -1,0 +1,11 @@
+# Kaggle competition data may not be redistributed: keep raw and processed data out of git
+data/raw/
+data/processed/*.csv
+*.zip
+__pycache__/
+.ipynb_checkpoints/
+data/processed/model.txt
+data/processed/quantile_lo.txt
+data/processed/quantile_hi.txt
+!data/processed/feature_names.csv
+data/processed/*_log.txt

@@ -1,0 +1,18 @@
+{
+  "valid_mae_model": 5.963181877885446,
+  "valid_mae_naive_zero": 6.061801117539524,
+  "improvement_pct": 1.626896655661103,
+  "train_days": [
+    0,
+    383
+  ],
+  "valid_days": [
+    384,
+    480
+  ],
+  "n_train_rows": 3741948,
+  "n_early_stop_rows": 429000,
+  "n_valid_rows": 1066944,
+  "best_iteration": 304,
+  "seed": 42
+}

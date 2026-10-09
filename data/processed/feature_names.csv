@@ -1,0 +1,20 @@
+feature,label,feature_group
+stock_id,Stock,Identity
+seconds_in_bucket,Seconds into auction,Time
+imbalance_size,Imbalance size,Imbalance
+imbalance_buy_sell_flag,Imbalance side (buy/sell),Imbalance
+reference_price,Reference price,Auction prices
+matched_size,Matched shares,Imbalance
+far_price,Far price,Auction prices
+near_price,Near price,Auction prices
+bid_price,Bid price,Order book
+bid_size,Bid size,Order book
+ask_price,Ask price,Order book
+ask_size,Ask size,Order book
+wap,Weighted average price,Order book
+spread_bps,Spread (bps),Order book
+imbalance_ratio,Imbalance ratio,Imbalance
+signed_imbalance_ratio,Signed imbalance ratio,Imbalance
+near_far_gap,Near-far price gap,Auction prices
+ref_wap_gap,Reference vs current price,Auction prices
+book_pressure,Book pressure (bids vs asks),Order book
