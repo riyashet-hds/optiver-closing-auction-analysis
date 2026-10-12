@@ -51,6 +51,8 @@ gradient-boosted trees trained on millions of rows.
 
 ### 1. The baseline has a small but consistent signal
 
+![Overview: daily correlation between forecast and actual move](screenshots/1_overview.png)
+
 Tested only on days it never saw (384-480), the model's predictions correlate with the actual
 60-second moves at 0.17. The correlation is positive on all 97 test days. It calls the direction
 of the move correctly 54.9% of the time, and its out-of-sample R-squared is 2.8%.
@@ -66,7 +68,7 @@ so this baseline is well below competitive level.
 
 ### 2. It fails just before new information is released
 
-![Where the model fails](screenshots/3_model_fails.png)
+![Where the model fails](screenshots/2_model_fails.png)
 
 Errors spike between 220 and 290 seconds into the auction, just before near and far prices are first
 published at 300 seconds. The model helps least there. For 20 of the 200 stocks it does worse
@@ -74,7 +76,7 @@ than predicting zero.
 
 ### 3. Two signals drive most predictions
 
-![Why the model predicts what it does](screenshots/4_why.png)
+![Why the model predicts what it does](screenshots/3_why.png)
 
 Book pressure (bid size against ask size) accounts for 22% of the model's influence. The gap between
 the auction's reference price and the current price accounts for 16%.
@@ -86,7 +88,7 @@ published.
 
 ### 4. Acting only on confident predictions cuts error by 30%
 
-![When should this model be trusted](screenshots/5_when_to_trust.png)
+![Sizing by confidence](screenshots/4_sizing_by_confidence.png)
 
 Each prediction gets an 80% range from quantile regression with conformal calibration. Ranking
 predictions by the width of their range and acting only on the narrowest half cuts MAE from 5.96 to
@@ -111,7 +113,9 @@ calibration transferred out of sample, but the economic value of a similar sizin
 
 ### 5. Market background
 
-![Auction overview](screenshots/1_auction.png)
+![The Nasdaq closing auction](screenshots/5_auction.png)
+
+![Which stocks are hardest to predict](screenshots/6_hardest_stocks.png)
 
 Volatility peaks at 270 seconds (13.3 bps), just before near and far prices are first published.
 Across 200 stocks, wider spreads go with higher volatility (Pearson r = 0.75), and the hardest stock is
@@ -122,7 +126,7 @@ context for readers outside finance.
 
 - The window just before the 300-second release is still under-covered (76.4%). Calibration cannot
   fix this. The model would need a signal that anticipates the release.
-- The risk-coverage result in finding 5 uses the ranges from the first calibration method.
+- The risk-coverage result in finding 4 uses the ranges from the first calibration method.
 - The test period (days 384-480) was calmer than the training period, so results may not hold in a
   more volatile market.
 - The baseline is deliberately simple. Leaderboard solutions were scored on a different, later
