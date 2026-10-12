@@ -1,0 +1,12 @@
+{
+  "correlation_pearson": 0.16721641528163916,
+  "correlation_spearman": 0.15402686958126185,
+  "mean_daily_correlation": 0.1669931110558889,
+  "days_positive_correlation": 97,
+  "test_days": 97,
+  "direction_hit_rate": 0.5489594580409094,
+  "r2_out_of_sample": 0.027934426090096776,
+  "mae_model": 5.963181877885446,
+  "mae_zero": 6.061801117539524,
+  "mae_reduction_pct": 1.626896655661103
+}

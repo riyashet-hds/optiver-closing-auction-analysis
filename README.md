@@ -1,9 +1,9 @@
 # When are closing-auction prices hardest to predict, and when can a model be trusted?
 
-A Power BI report and a Python analysis of the Optiver "Trading at the Close" Kaggle data, covering
-the Nasdaq closing auction for 200 stocks over 481 trading days. It asks four questions. Where are
-prices hardest to predict? Where does a baseline model fail? Why does it predict what it does? And
-when can its predictions be trusted?
+A Power BI report and a Python analysis of the Optiver "Trading at the Close" Kaggle data. It covers
+the Nasdaq closing auction for 200 stocks over 481 trading days. It asks four questions. How much
+predictive skill does a baseline model have out of sample? Where does it fail? What drives its
+predictions? And how should its confidence change how much weight a trader puts on each prediction?
 
 The report is in [`powerbi/closing_auction.pdf`](powerbi/closing_auction.pdf) (no Power BI needed)
 and [`powerbi/closing_auction.pbix`](powerbi/closing_auction.pbix).
@@ -49,29 +49,30 @@ gradient-boosted trees trained on millions of rows.
 
 ## Findings
 
-### 1. Prices are hardest to predict just before new information is released
+### 1. The baseline has a small but consistent signal
 
-![Auction overview](screenshots/1_auction.png)
+Tested only on days it never saw (384-480), the model's predictions correlate with the actual
+60-second moves at 0.17. The correlation is positive on all 97 test days. It calls the direction
+of the move correctly 54.9% of the time, and its out-of-sample R-squared is 2.8%.
 
-Volatility peaks at 270 seconds (13.3 bps), just before near and far prices are first published, then
-drops sharply. Spreads narrow steadily as the auction goes on.
+For context, Gu, Kelly and Xiu (2020) report monthly out-of-sample R-squared of roughly 0.1-0.4% for
+individual stock returns and still find large economic value. Horizons differ, so this is context
+rather than a comparison.
 
-### 2. Thinly traded stocks are the noisiest
+On the competition metric, mean absolute error, the gain over predicting zero is only 1.6% (5.96 vs
+6.06 bps). Error-based metrics barely reward a weak signal when most of the move is noise. The
+winning Kaggle teams reached roughly 15% lower error than predicting zero on a different test period,
+so this baseline is well below competitive level.
 
-![Hardest stocks](screenshots/2_hardest_stocks.png)
-
-Across 200 stocks, wider spreads go with higher volatility (Pearson r = 0.75). The hardest stock is
-4.6 times as volatile as the easiest.
-
-### 3. The baseline beats "predict zero" by only 1.6%
+### 2. It fails just before new information is released
 
 ![Where the model fails](screenshots/3_model_fails.png)
 
-The model's MAE is 5.96 bps against 6.06 for predicting zero. That small gain is the honest picture,
-since most of a 60-second move is noise. Errors spike in the same 220-290 second window, and the model
-helps least there. For 20 of the 200 stocks it does worse than predicting zero.
+Errors spike between 220 and 290 seconds into the auction, just before near and far prices are first
+published at 300 seconds. The model helps least there. For 20 of the 200 stocks it does worse
+than predicting zero.
 
-### 4. Two signals drive most predictions
+### 3. Two signals drive most predictions
 
 ![Why the model predicts what it does](screenshots/4_why.png)
 
@@ -83,13 +84,14 @@ My best explanation is that the current price already leans towards the sell sid
 settles back. Near price barely matters until 300 seconds, then becomes a key signal the moment it is
 published.
 
-### 5. Trusting only confident predictions cuts error by 30%
+### 4. Acting only on confident predictions cuts error by 30%
 
 ![When should this model be trusted](screenshots/5_when_to_trust.png)
 
-Ranking predictions by the width of their range and acting only on the narrowest half cuts MAE from
-5.96 to 4.16 bps. That beats two simpler rules: a stock's past volatility (4.63) and its spread
-(4.75).
+Each prediction gets an 80% range from quantile regression with conformal calibration. Ranking
+predictions by the width of their range and acting only on the narrowest half cuts MAE from 5.96 to
+4.16 bps. That beats two simpler rules: a stock's past volatility (4.63) and its spread (4.75). In
+trading terms, the range tells you where to size up and where to stay out.
 
 The first calibration held 81.8% coverage on average, but individual stocks ranged from 59% to 91%.
 I traced this to stocks whose volatility jumped after the calibration days. The correlation between
@@ -103,7 +105,18 @@ parts of the problem:
 | 3. Method 2 + daily update | 80.8% | 19.47 bps | 62.4% | 6 | 78.4% |
 | 4. Method 3 + volatility scaling | 80.2% | 19.79 bps | 74.4% | 5 | 76.4% |
 
-The final method lifted the stock whose volatility rose 2.4 times from 62% to 85% coverage.
+The final method lifted the stock whose volatility rose 2.4 times from 62% to 85% coverage. Whether
+this sizing adds money after costs is untested here. A recent pre-registered study found that
+calibration transferred out of sample, but the economic value of a similar sizing rule did not.
+
+### 5. Market background
+
+![Auction overview](screenshots/1_auction.png)
+
+Volatility peaks at 270 seconds (13.3 bps), just before near and far prices are first published.
+Across 200 stocks, wider spreads go with higher volatility (Pearson r = 0.75), and the hardest stock is
+4.6 times as volatile as the easiest. These are well-known features of closing auctions, included as
+context for readers outside finance.
 
 ## Limitations
 
@@ -121,7 +134,7 @@ The final method lifted the stock whose volatility rose 2.4 times from 62% to 85
 2. `pip install -r requirements.txt`
 3. `python scripts/prepare_tables.py`
 4. `python scripts/train_baseline.py`
-5. Inside `scripts/`, run in order: `shap_analysis.py`, `uncertainty_analysis.py`,
+5. Inside `scripts/`, run in order: `skill_metrics.py`, `shap_analysis.py`, `uncertainty_analysis.py`,
    `group_conformal.py`, `vol_conformal.py`, `build_page5_tables.py`.
 6. Open `powerbi/closing_auction.pbix` in Power BI Desktop and refresh.
 
@@ -140,3 +153,6 @@ deficiency.
 - Gibbs and Candes (2021). Adaptive conformal inference under distribution shift. NeurIPS.
 - Vovk, Gammerman and Shafer (2005). Algorithmic Learning in a Random World. Springer.
 - Lundberg and Lee (2017). A unified approach to interpreting model predictions. NeurIPS.
+- Gu, Kelly and Xiu (2020). Empirical asset pricing via machine learning. Review of Financial Studies.
+- Ryan (2026). Conformal Kelly: conformal prediction intervals as the scale in fractional Kelly
+  position sizing. arXiv 2608.01494.
