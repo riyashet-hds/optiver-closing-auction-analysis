@@ -178,3 +178,24 @@ hardest at the start and the end". The Power BI chart showed otherwise: it **pea
 are published at 300 s, then drops sharply (11.0 at 300 s, 10.2 at 540 s; 11.6 at 0 s). The same
 220-290 s window is where the model's errors spike and the calibrated ranges under-cover. One story
 across three analyses: the moments before new auction information is released are the most uncertain.
+
+---
+
+## 2026-10-12: Feedback from a finance practitioner, checked against the literature
+
+Feedback: pages 1-2 are basic knowledge in finance; where is the model's accuracy headlined?
+
+- Baseline skill in finance terms (validation days 384-480): **correlation with actual moves 0.167
+  (Spearman 0.154), positive on every one of the 97 test days; direction correct 54.9% of the time;
+  out-of-sample R-squared 2.8%.** MAE gain vs predict-zero is only 1.6% because the target is
+  fat-tailed and MAE barely rewards a weak but real signal.
+- Context: Gu, Kelly and Xiu (2020, RFS) report monthly out-of-sample R-squared of roughly 0.1-0.4% for
+  individual stocks and still find economically large portfolio returns, so small R-squared is normal.
+  Horizons differ, so this is context, not a comparison.
+- Honest gap: Kaggle top private scores sat near MAE 5.40 against an unofficial predict-zero figure of
+  ~6.4 (about 15% better), on a different test period. The baseline is well below competitive level.
+- Conformal intervals for position sizing exist in the literature (e.g. Conformal Kelly, arXiv
+  2608.01494), but a pre-registered follow-up found calibration transferred while the economic value
+  did not. Uncertainty is a second act, not the headline.
+- Lesson: lead with predictive skill (correlation, hit rate, R-squared, MAE vs baseline), then where
+  it fails, then how confidence should change position size.
