@@ -24,7 +24,7 @@ needs a strategy. I don't know which one yet.
 
 ---
 
-## 2026-10-08: What I learned from talking it through (with Claude)
+## 2026-10-08: What I clarified before modelling
 
 - **I don't set or adjust prices in this task.** The prices (reference, near, far, bid/ask, WAP) are
   inputs. The task is to *predict* the target: each stock's 60-second future move relative to a
